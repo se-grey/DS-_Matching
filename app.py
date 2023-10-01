@@ -22,15 +22,15 @@ def parse_string(vec: str) -> list[float]:
 @app.on_event("startup")
 def start():
     global faiss_index
-	global scaler_SS
+    global scaler_SS
     n_cells = 5
     scaler_filename = '/content/drive/MyDrive/std_scale_1.bin'
-	index_filename = '/content/drive/MyDrive/idx_l2_200_20.index'
-	
+    index_filename = '/content/drive/MyDrive/idx_l2_200_20.index'
+    
     try:
-	    idx_l2 = faiss.read_index(index_filename)
-		scaler_SS=load(scaler_filename)
-	except:
+        idx_l2 = faiss.read_index(index_filename)
+        scaler_SS=load(scaler_filename)
+    except:
         return {"status": "fail", "message": "No index data"}
 
 
@@ -42,8 +42,8 @@ def main() -> dict:
 @app.get("/knn")
 def match(item: Union[str, None] = None) -> dict:
     global faiss_index
-    global scaler_SS	
-	
+    global scaler_SS
+    
     if item is None:
         return {"status": "fail", "message": "No input data"}
 
@@ -51,7 +51,7 @@ def match(item: Union[str, None] = None) -> dict:
     vec = np.ascontiguousarray(vec, dtype="float")[np.newaxis, :]
     # df_validation_SS = scaler_SS.transform(df_validation)
 
-	r, idx = idx_l2.search(vec, 5)
+    r, idx = idx_l2.search(vec, 5)
 
     return {"status": "OK", "data": [str(el) for el in idx]}
 
